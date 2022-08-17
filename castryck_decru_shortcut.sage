@@ -53,7 +53,9 @@ def CastryckDecruAttack(E_start, P2, Q2, EB, PB, QB, two_i, num_cores=1):
         #  v    v
         #  CB-> EB
         split = Does22ChainSplit(C, EB, 2^alp*P_c, 2^alp*Q_c, 2^alp*PB, 2^alp*QB, ai)
+        #print(split)
         if split:
+            print("found")
             Eguess, _ = Pushing3Chain(E_start, tauhatkernel, bet1)
 
             chain, (E1, E2) = split
@@ -99,7 +101,7 @@ def CastryckDecruAttack(E_start, P2, Q2, EB, PB, QB, two_i, num_cores=1):
                         sk = int(-Z3(M12)/Z3(M22))
                         return sk
             else:
-                print("Trying to compute kernel to E2")
+                print("Trying to compute kernel to E2 ")
                 E2.set_order((p+1)^2) # keep checks
                 P_E2, Q_E2 = supersingular_gens(E2)
                 P3_E2 = ((p+1) / 3^b) * P_E2
@@ -112,14 +114,19 @@ def CastryckDecruAttack(E_start, P2, Q2, EB, PB, QB, two_i, num_cores=1):
                 M22 = fast_log3(Q3c_E2.weil_pairing(Q3_E2, 3^b), w)
                 if Z3(M11*M22-M12*M21) == 0:
                     print("Found kernel after split to E2")
-                    #print(M)
+                    print(M11)
+                    print(M12)
+                    print(M21)
+                    print(M22)
                     if M21 % 3 != 0:
+                        print("if")
                         sk = int(-Z3(M11)/Z3(M21))
                         return sk
                     elif M22 % 3 != 0:
+                        print("else")
                         sk = int(-Z3(M12)/Z3(M22))
                         return sk
-
+                     
             return True
 
     guesses = [ZZ(i).digits(3, padto=bet1) for i in range(3^bet1)]
@@ -131,6 +138,7 @@ def CastryckDecruAttack(E_start, P2, Q2, EB, PB, QB, two_i, num_cores=1):
             bobskey = sk
             break
 
+    print(f"In ternary, this is: {Integer(bobskey).digits(base=3)}")
     # Sanity check
     bobscurve, _ = Pushing3Chain(E_start, P3 + bobskey*Q3, b)
     found = bobscurve.j_invariant() == EB.j_invariant()

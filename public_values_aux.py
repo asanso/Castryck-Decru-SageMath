@@ -26,7 +26,7 @@ def check_torsion_points(E, a, b, P2, Q2, P3, Q3):
     assert P2.weil_pairing(Q2, 2**a)**(2**(a-1)) != 1
     assert P3.weil_pairing(Q3, 3**b)**(3**(b-1)) != 1
 
-def gen_bob_keypair(E_start, b, P2, Q2, P3, Q3):
+def gen_bob_keypair2(E_start, b, P2, Q2, P3, Q3):
     # generate challenge key
     bobs_key = randint(0,3**b)
     K = P3 + bobs_key*Q3
@@ -37,3 +37,20 @@ def gen_bob_keypair(E_start, b, P2, Q2, P3, Q3):
     PB, QB = phi(P2), phi(Q2)
 
     return bobs_key, EB, PB, QB
+
+def gen_bob_keypair(E_start, b, P2, Q2, P3, Q3):
+    bobs_key = randint(0,3**b)
+    # generate challenge key
+    C = E_start
+    P = P2
+    Q = Q2
+    i = 5
+    # for j in [1..i] do
+    for j in range(1, i+1):
+        #print(j)
+        comp = C.isogenies_prime_degree(3)[1]
+        C = comp.codomain()
+        print(C.j_invariant())
+        P = comp(P)
+        Q =  comp(Q)   
+    return bobs_key,C, P,Q

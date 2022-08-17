@@ -4,8 +4,8 @@ from public_values_aux import *
 load('castryck_decru_shortcut.sage')
 
 # Baby SIKEp64 parameters
-a = 33
-b = 19
+a = 8
+b = 5
 
 # Set the prime, finite fields and starting curve
 # with known endomorphism
